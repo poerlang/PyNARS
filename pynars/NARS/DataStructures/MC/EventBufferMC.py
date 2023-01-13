@@ -7,10 +7,9 @@ from pynars.NARS.DataStructures.MC.SlotMC import SlotMC
 
 class EventBufferMC(InputBufferMC):
 
-    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction,
-                 memory: Memory, root_UI, UI_name):
+    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory):
         super(EventBufferMC, self).__init__(num_slot, num_event, num_anticipation, num_operation, num_prediction,
-                                            memory, root_UI, UI_name)
+                                            memory)
 
     def operation_processing_default(self):
         """
@@ -37,12 +36,5 @@ class EventBufferMC(InputBufferMC):
         self.local_evaluation()  # 2nd step
         self.memory_based_evaluations()  # 3rd step
         task_forward = self.prediction_generation()  # 4th step
-
-        # GUI
-        # ==============================================================================================================
-        self.UI_roll()
-        self.UI_content_update()
-        self.UI_show()
-        # ==============================================================================================================
 
         return task_forward

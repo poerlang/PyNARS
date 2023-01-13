@@ -43,8 +43,7 @@ class InputBufferMC(object):
     The super class of all input buffers (event buffer, internal buffer, global buffer).
     """
 
-    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory, root_UI,
-                 UI_name):
+    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory):
         self.num_slot = num_slot * 2 + 1
         self.present = num_slot
 
@@ -56,58 +55,6 @@ class InputBufferMC(object):
         self.memory = memory
         self.prediction_table = []
         self.slots = [SlotMC(num_event, num_anticipation, num_operation) for _ in range(self.num_slot)]
-
-        # GUI
-        # ==============================================================================================================
-        ctypes.windll.shcore.SetProcessDpiAwareness(1)  # auto-resolution rate
-        SF = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-
-        self.top = tk.Toplevel(root_UI, width=160, height=50)  # top canvas created
-        self.top.title(UI_name)
-        self.top.tk.call("tk", "scaling", SF / 75)
-
-        self.notebook = ttk.Notebook(self.top)  # notebook created
-        self.notebook.pack(pady=10, padx=10, expand=True)
-        # each time slot has one page on the notebook
-        self.P = {}  # reference of all notebook pages
-        self.contents_UI = []  # reference of the content of each notebook page
-        for i in range(self.num_slot):
-            P_i = ttk.Frame(self.notebook, width=160, height=50)  # notebook page created
-            self.contents_UI.append({"historical_compound": [],
-                                     "concurrent_compound": [],
-                                     "anticipation": [],
-                                     "prediction": []})
-            P_i.pack(fill="both", expand=True)
-            self.notebook.add(P_i, text="Slot [" + str(i - self.present) + "]     ")
-
-            # frames of each part on the page
-            F_1 = tk.LabelFrame(P_i, width=41, height=50, text="Historical Compound")  # frame created on the page
-            F_2 = tk.LabelFrame(P_i, width=41, height=50, text="Concurrent Compound")
-            F_3 = tk.LabelFrame(P_i, width=41, height=50, text="Anticipation")
-            F_4 = tk.LabelFrame(P_i, width=41, height=50, text="Prediction")
-            F_1.pack(side=tk.LEFT)
-            F_2.pack(side=tk.LEFT)
-            F_3.pack(side=tk.LEFT)
-            F_4.pack(side=tk.LEFT)
-            Font = tkFont.Font(family="monaco", size=8)
-            T_1 = ScrolledText(F_1, width=41, height=50, font=Font)  # scrolled text created on the frame
-            T_2 = ScrolledText(F_2, width=41, height=50, font=Font)
-            T_3 = ScrolledText(F_3, width=41, height=50, font=Font)
-            T_4 = ScrolledText(F_4, width=41, height=50, font=Font)
-            T_1.pack(side=tk.RIGHT)
-            T_2.pack(side=tk.RIGHT)
-            T_3.pack(side=tk.RIGHT)
-            T_4.pack(side=tk.RIGHT)
-            T_1.insert(tk.END, "=" * 18 + "READY" + "=" * 18)  # initialization reminder
-            T_2.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_3.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_4.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_1.configure(state="disabled")  # disable user input (just for display)
-            T_2.configure(state="disabled")
-            T_3.configure(state="disabled")
-            T_4.configure(state="disabled")
-            self.P.update({P_i: [T_1, T_2, T_3, T_4]})
-        # ==============================================================================================================
 
     def update_prediction(self, p: Task):
         for i in range(len(self.prediction_table)):  # delete if existed
@@ -352,104 +299,15 @@ class InputBufferMC(object):
     def reset(self):
         self.slots = [SlotMC(self.num_event, self.num_anticipation, self.num_operation) for _ in range(self.num_slot)]
         self.prediction_table = []
-        self.contents_UI = []
-        for i in range(self.num_slot):
-            self.contents_UI.append({"historical_compound": [],
-                                     "concurrent_compound": [],
-                                     "anticipation": [],
-                                     "prediction": []})
-        for each in self.P:
-            T_1, T_2, T_3, T_4 = self.P[each]
-            T_1.configure(state="normal")
-            T_2.configure(state="normal")
-            T_3.configure(state="normal")
-            T_4.configure(state="normal")
-            T_1.delete("1.0", "end")
-            T_2.delete("1.0", "end")
-            T_3.delete("1.0", "end")
-            T_4.delete("1.0", "end")
-            T_1.insert(tk.END, "=" * 18 + "READY" + "=" * 18)  # initialization reminder
-            T_2.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_3.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_4.insert(tk.END, "=" * 18 + "READY" + "=" * 18)
-            T_1.configure(state="disabled")  # disable user input
-            T_2.configure(state="disabled")
-            T_3.configure(state="disabled")
-            T_4.configure(state="disabled")
 
-    def UI_roll(self):
-        self.contents_UI = self.contents_UI[1:]
-        self.contents_UI.append({"historical_compound": [],
-                                 "concurrent_compound": [],
-                                 "anticipation": [],
-                                 "prediction": []})
-
-    def UI_show_single_page(self, P_i, content_UI):
-        T_1, T_2, T_3, T_4 = self.P[P_i][0], self.P[P_i][1], self.P[P_i][2], self.P[P_i][3]
-
-        # add tags
-        Font = tkFont.Font(family="monaco", size=8, weight="bold")
-        T_1.tag_config("tag_1", font=Font)  # for the word of each task
-        T_1.tag_config("tag_2", foreground="red")  # for the budget and truth-value
-        T_2.tag_config("tag_1", font=Font)
-        T_2.tag_config("tag_2", foreground="red")
-        T_3.tag_config("tag_1", font=Font)
-        T_3.tag_config("tag_2", foreground="red")
-        T_4.tag_config("tag_1", font=Font)
-        T_4.tag_config("tag_2", foreground="red")
-
-        T_1.configure(state="normal")  # enable inputting
-        T_2.configure(state="normal")
-        T_3.configure(state="normal")
-        T_4.configure(state="normal")
-        T_1.delete("1.0", "end")  # delete old contents
-        T_2.delete("1.0", "end")
-        T_3.delete("1.0", "end")
-        T_4.delete("1.0", "end")
-
-        for each in content_UI["historical_compound"]:
-            if each is not None and len(each) != 0:
-                BT, word, end = each[0], each[1], each[2]
-                T_1.insert(tk.END, BT, "tag_2")
-                T_1.insert(tk.END, word, "tag_1")
-                T_1.insert(tk.END, end)
-
-        for each in content_UI["concurrent_compound"]:
-            if each is not None and len(each) != 0:
-                BT, word, end = each[0], each[1], each[2]
-                T_2.insert(tk.END, BT, "tag_2")
-                T_2.insert(tk.END, word, "tag_1")
-                T_2.insert(tk.END, end)
-
-        for each in content_UI["anticipation"]:
-            if each is not None and len(each) != 0:
-                BT, word, end = each[0], each[1], each[2]
-                T_3.insert(tk.END, BT, "tag_2")
-                T_3.insert(tk.END, word, "tag_1")
-                T_3.insert(tk.END, end)
-
-        for each in content_UI["prediction"]:
-            if each is not None and len(each) != 0:
-                BT, word, end = each[0], each[1], each[2]
-                T_4.insert(tk.END, BT, "tag_2")
-                T_4.insert(tk.END, word, "tag_1")
-                T_4.insert(tk.END, end)
-
-        T_1.configure(state="disabled")  # disable user input
-        T_2.configure(state="disabled")
-        T_3.configure(state="disabled")
-        T_4.configure(state="disabled")
-
-    def UI_content_update(self):
-        for i in range(self.num_slot):
-            self.contents_UI[i].update({"historical_compound": [],
-                                        "concurrent_compound": [UI_better_content(each[1]) for each in
-                                                                self.slots[i].events],
-                                        "anticipation": [UI_better_content(self.slots[i].anticipations[each].t) for each
-                                                         in self.slots[i].anticipations],
-                                        "prediction": [UI_better_content(each) for each in
-                                                       self.prediction_table]})
-
-    def UI_show(self):
-        for i, each in enumerate(self.P):
-            self.UI_show_single_page(each, self.contents_UI[i])
+    def content(self):
+        P = ""
+        for each in self.prediction_table:
+            P += str(format(each.truth.f, ".3f")) + "," + str(
+                format(each.truth.c, ".3f")) + " | " + each.term.word + " | " + str(
+                format(each.budget.priority, ".3f")) + "," + str(format(each.budget.durability, ".3")) + "," + str(
+                format(each.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+        AEOs = []
+        for each_slot in self.slots:
+            AEOs.append(each_slot.content())
+        return [AEOs, P]

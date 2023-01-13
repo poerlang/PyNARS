@@ -92,3 +92,26 @@ class SlotMC:
                 self.update_events(each_event_unexpected)
 
         # unsatisfied anticipations will be handled in InputBufferMC.py
+
+    def content(self):
+        A = ""
+        E = ""
+        O = ""
+        for each in self.anticipations:
+            A += str(format(self.anticipations[each].t.truth.f, ".3f")) + "," + str(
+                format(self.anticipations[each].t.truth.c, ".3f")) + " | " + self.anticipations[
+                     each].t.term.word + " | " + str(
+                format(self.anticipations[each].t.budget.priority, ".3f")) + "," + str(
+                format(self.anticipations[each].t.budget.durability, ".3f")) + "," + str(
+                format(self.anticipations[each].t.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+        for each in self.events:
+            E += str(format(each[1].truth.f, ".3f")) + "," + str(format(each[1].truth.c, ".3f")) + " | " + each[
+                1].term.word + " | " + str(format(each[1].budget.priority, ".3f")) + "," + str(
+                format(each[1].budget.durability, ".3f")) + "," + str(
+                format(each[1].budget.quality, ".3f")) + "\n" + "-------" + "\n"
+        for each in self.operations:
+            O += str(format(each.truth.f, ".3f")) + "," + str(
+                format(each.truth.c, ".3f")) + " | " + each.term.word + " | " + str(
+                format(each.budget.priority, ".3f")) + "," + str(format(each.budget.durability, ".3f")) + "," + str(
+                format(each.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+        return [A, E, O]

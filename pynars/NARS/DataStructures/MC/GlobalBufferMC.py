@@ -11,14 +11,13 @@ class GlobalBufferMC(InputBufferMC):
     Currently, this is the only difference.
     """
 
-    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction,
-                 memory: Memory, root_UI, UI_name):
+    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory):
         """
         Though the global buffer has an input variable "num_operation", but a global buffer will never process any
         operations, so this variable should always be 0.
         """
         super(GlobalBufferMC, self).__init__(num_slot, num_event, num_anticipation, num_operation, num_prediction,
-                                             memory, root_UI, UI_name)
+                                             memory)
 
     def prediction_generation(self):
         """
@@ -89,12 +88,5 @@ class GlobalBufferMC(InputBufferMC):
         self.local_evaluation()  # 2nd step
         self.memory_based_evaluations()  # 3rd step
         task_forward = self.prediction_generation()  # 4th step
-
-        # GUI
-        # ==============================================================================================================
-        self.UI_roll()
-        self.UI_content_update()
-        self.UI_show()
-        # ==============================================================================================================
 
         return task_forward
