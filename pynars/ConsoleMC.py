@@ -1,13 +1,15 @@
-import os
 import argparse
+import os
 import sys
 
 import PySide2
-import matplotlib.pyplot as plt
-from pynars.utils.tools import rand_seed
-from pynars.utils.Print import out_print, PrintType
-from pynars.NARS.Control.ReasonerMC import ReasonerMC
+import PySide2.QtWidgets
+from PySide2.QtGui import QPalette, QColor
 from PySide2.QtWidgets import QApplication, QWidget
+
+from pynars.NARS.Control.ReasonerMC import ReasonerMC
+from pynars.utils.Print import out_print, PrintType
+from pynars.utils.tools import rand_seed
 
 
 def info(title):
@@ -26,10 +28,12 @@ nars = ReasonerMC(100)
 class MyWidget(QWidget):
     def __init__(self):
         super().__init__()
-
-        # 设置界面为我们生成的界面
         self.ui = nars
         self.ui.setupUi(self)
+        palette = self.palette()
+        palette.setColor(QPalette.Background, QColor(211, 208, 201))
+        self.setPalette(palette)
+        self.setAutoFillBackground(True)
 
 
 def run_nars_MC():
@@ -45,6 +49,7 @@ def run_nars_MC():
     plugin_path = os.path.join(dirname, "plugins", "platforms")
     os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
     app = QApplication(sys.argv)
+    app.setStyle("WindowsVista")
     window = MyWidget()
     window.show()
     sys.exit(app.exec_())

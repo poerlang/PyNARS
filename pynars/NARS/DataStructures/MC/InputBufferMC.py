@@ -1,12 +1,8 @@
-import ctypes
-import tkinter as tk
-import tkinter.font as tkFont
 from copy import deepcopy
-from tkinter import ttk
-from tkinter.scrolledtext import ScrolledText
 
 import numpy as np
 
+from pynars.GUI.Ui_Form import escape
 from pynars.NAL.Functions import Stamp_merge, Budget_merge, Truth_induction, Truth_deduction
 from pynars.NARS.DataStructures import Memory
 from pynars.NARS.DataStructures.MC.AnticipationMC import AnticipationMC
@@ -301,12 +297,15 @@ class InputBufferMC(object):
         self.prediction_table = []
 
     def content(self):
-        P = ""
+        P = "<p style=\"text-align: center\"> <hr> </hr>"
         for each in self.prediction_table:
-            P += str(format(each.truth.f, ".3f")) + "," + str(
-                format(each.truth.c, ".3f")) + " | " + each.term.word + " | " + str(
-                format(each.budget.priority, ".3f")) + "," + str(format(each.budget.durability, ".3")) + "," + str(
-                format(each.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+            P += "<font color='red'>" + str(
+                format(each.truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                format(each.truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                each.term.word) + "</b> <br> <font color='green'>" + str(
+                format(each.budget.priority, ".3f")) + " | " + str(
+                format(each.budget.durability, ".3f")) + " | " + str(
+                format(each.budget.quality, ".3f")) + "</font> <hr> </hr>"
         AEOs = []
         for each_slot in self.slots:
             AEOs.append(each_slot.content())

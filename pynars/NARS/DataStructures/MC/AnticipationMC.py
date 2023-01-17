@@ -1,6 +1,6 @@
-from pynars.Narsese import Task, parser
 from pynars.NAL.Inference.LocalRules import revision
 from pynars.NARS.DataStructures.MC import InputBufferMC
+from pynars.Narsese import Task, parser
 
 
 class AnticipationMC:

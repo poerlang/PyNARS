@@ -1,4 +1,4 @@
-import tkinter as tk
+from pynars.GUI.Ui_Form import escape
 from pynars.Narsese import Task, Compound, Interval, Term
 
 
@@ -70,12 +70,29 @@ class OutputBufferMC:
         self.active_questions = []
         self.active_goals = []
 
-    def content(self):
-        ret = ""
-        for each in self.active_questions:
-            ret += str(each.truth.f) + "," + str(each.truth.c) + " | " + each.term.word + " | " + str(
-                each.budget.priority) + "," + str(each.budget.durability) + "," + str(each.budget.quality) + "\n"
-        for each in self.active_goals:
-            str(each.truth.f) + "," + str(each.truth.c) + " | " + each.term.word + " | " + str(
-                each.budget.priority) + "," + str(each.budget.durability) + "," + str(each.budget.quality) + "\n"
+    def content(self, additional_info):
+        ret = "<p style=\"text-align: left\"> <hr> </hr>" + additional_info + "Active Questions: "
+        if len(self.active_questions) != 0:
+            ret += "<br>"
+            for each in self.active_questions:
+                ret += "<font color='red'>" + str(format(each.truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                    format(each.truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                    each.term.word) + "</b> <br> <font color='green'>" + str(
+                    format(each.budget.priority, ".3f")) + " | " + str(
+                    format(each.budget.durability, ".3f")) + " | " + str(
+                    format(each.budget.quality, ".3f")) + "</font> <hr> </hr>"
+        else:
+            ret += "None <hr> </hr>"
+        ret += "Active Goals: "
+        if len(self.active_goals) != 0:
+            ret += "<br>"
+            for each in self.active_goals:
+                ret += "<font color='red'>" + str(format(each.truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                    format(each.truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                    each.term.word) + "</b> <br> <font color='green'>" + str(
+                    format(each.budget.priority, ".3f")) + " | " + str(
+                    format(each.budget.durability, ".3f")) + " | " + str(
+                    format(each.budget.quality, ".3f")) + "</font> <hr> </hr>"
+        else:
+            ret += "None <hr> </hr>"
         return ret

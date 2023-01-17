@@ -5,6 +5,10 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
+def escape(text):
+    return text.replace("&", "&amp;").replace(">", "&gt;").replace("<", "&lt;")
+
+
 class Ui_Form(object):
 
     def __init__(self):
@@ -33,29 +37,29 @@ class Ui_Form(object):
                 self.output_textBrowser.setText(content[each])
             elif each == "internal_buffer":
                 AEOs, P = content[each]
-                self.predictions_textBroswer[0].setText(P)
+                self.predictions_textBroswer[0].setHtml(P)
                 for i in range(self.num_slots):
                     A, E, O = AEOs[i]
-                    self.anticipations_textBrowser[0][i].setText(A)
-                    self.events_textBrowser[0][i].setText(E)
-                    self.operations_textBrowser[0][i].setText(O)
+                    self.anticipations_textBrowser[0][i].setHtml(A)
+                    self.events_textBrowser[0][i].setHtml(E)
+                    self.operations_textBrowser[0][i].setHtml(O)
             elif each == "global_buffer":
                 AEOs, P = content[each]
-                self.predictions_textBroswer[1].setText(P)
+                self.predictions_textBroswer[1].setHtml(P)
                 for i in range(self.num_slots):
                     A, E, O = AEOs[i]
-                    self.anticipations_textBrowser[1][i].setText(A)
-                    self.events_textBrowser[1][i].setText(E)
-                    self.operations_textBrowser[1][i].setText(O)
+                    self.anticipations_textBrowser[1][i].setHtml(A)
+                    self.events_textBrowser[1][i].setHtml(E)
+                    self.operations_textBrowser[1][i].setHtml(O)
             else:
                 channel_idx = self.IDC[each]
                 AEOs, P = content[each]
-                self.predictions_textBroswer[channel_idx].setText(P)
+                self.predictions_textBroswer[channel_idx].setHtml(P)
                 for i in range(self.num_slots):
                     A, E, O = AEOs[i]
-                    self.anticipations_textBrowser[channel_idx][i].setText(A)
-                    self.events_textBrowser[channel_idx][i].setText(E)
-                    self.operations_textBrowser[channel_idx][i].setText(O)
+                    self.anticipations_textBrowser[channel_idx][i].setHtml(A)
+                    self.events_textBrowser[channel_idx][i].setHtml(E)
+                    self.operations_textBrowser[channel_idx][i].setHtml(O)
 
     def setupUi(self, Form):
 
@@ -97,6 +101,9 @@ class Ui_Form(object):
         # output text browser
         self.output_textBrowser = QTextBrowser(self.output_widget)
         self.output_textBrowser.setObjectName(u"output_textBrowser")
+        self.output_textBrowser.setToolTip("The output information of the system, it will basically cover what the"
+                                           "system had just accomplished, and the currently active goals and questions."
+                                           "")
         self.output_layout.addWidget(self.output_textBrowser, 1, 0, 1, 1)  # put the text browser to the layout
         # output label
         self.output_label = QLabel(self.output_widget)
@@ -113,6 +120,8 @@ class Ui_Form(object):
         # input text editor
         self.input_textEdit = QTextEdit(self.input_widget)
         self.input_textEdit.setObjectName(u"input_textEdit")
+        self.input_textEdit.setToolTip("Input Narsese by the users. The inputs will be direct accepted by the memory,"
+                                       "but it might not be processed due to its priority.")
         self.input_layout.addWidget(self.input_textEdit, 1, 0, 1, 1)  # put the text editor to the layout
         # input text label
         self.input_label = QLabel(self.input_widget)
@@ -157,6 +166,9 @@ class Ui_Form(object):
         """
         # this is the thing (the folder in the folder) contained in the above widget, another widget of channels
         self.channel_widget = QTabWidget(self.right_widget)
+        self.channel_widget.setToolTip(
+            "Different channels, this only shows the buffers of each channels, "
+            "including the internal buffer and the global buffer.")
         """
         Note that the above widget is a TabWidget, which is a widget with multiple pages.
         """
@@ -233,6 +245,8 @@ class Ui_Form(object):
             """
             # slots TabWidget creation, this is the widget contained in the slot_widget[i]
             self.slots_TabWidgets.append(QTabWidget(self.slots_widgets[i]))
+            self.slots_TabWidgets[i].setToolTip("Slots of different buffers, a slot contains 3 parts of information,"
+                                                "1) events, 2) anticipations and 3) operations (to-do).")
             self.slots_TabWidgets[i].setObjectName(u"slots_tabWidget_" + str(i + 1))
             for j in range(self.num_slots):
                 self.slot_widget[i].append(QWidget())
@@ -312,6 +326,8 @@ class Ui_Form(object):
             # predictions
             # create widget
             self.predictions_widget.append(QWidget(self.slot_prediction_splitters[i]))
+            self.predictions_widget[i].setToolTip("The prediction table is shared among different slots in the same "
+                                                  "buffer.")
             self.predictions_widget[i].setObjectName(u"predictions_widget_" + str(i + 1))
             # create layout
             self.predictions_layout.append(QGridLayout(self.predictions_widget[i]))
@@ -333,6 +349,7 @@ class Ui_Form(object):
             self.channel_widget_layouts[i].addWidget(self.slot_prediction_splitters[i], 1, 0, 1, 1)
             # create a button (check box)
             self.active_button.append(QRadioButton(self.channel_widget_items[i]))
+            self.active_button[i].setToolTip("Select this one will make this channel transparent to the system.")
             self.active_button[i].setObjectName(u"active_button_" + str(i + 1))
             # add it to the layout
             self.channel_widget_layouts[i].addWidget(self.active_button[i], 0, 0, 1, 1)
@@ -356,7 +373,7 @@ class Ui_Form(object):
     # setupUi
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("PyNARS 3.1.3 dev", u"Form", None))
+        Form.setWindowTitle(QCoreApplication.translate("PyNARS 3.1.3 dev", u"PyNARS 3.1.3 dev", None))
         self.output_textBrowser.setHtml(QCoreApplication.translate("Form",
                                                                    u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                                                                    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

@@ -1,6 +1,8 @@
 import numpy as np
-from pynars.Narsese import Task, Budget, Term, Judgement
+
+from pynars.GUI.Ui_Form import escape
 from pynars.NARS.DataStructures.MC import AnticipationMC, InputBufferMC
+from pynars.Narsese import Task, Budget, Term, Judgement
 
 
 # the priority value of events
@@ -94,24 +96,29 @@ class SlotMC:
         # unsatisfied anticipations will be handled in InputBufferMC.py
 
     def content(self):
-        A = ""
-        E = ""
-        O = ""
+        A = "<p style=\"text-align: center\"> <hr> </hr>"
+        E = "<p style=\"text-align: center\"> <hr> </hr>"
+        O = "<p style=\"text-align: center\"> <hr> </hr>"
         for each in self.anticipations:
-            A += str(format(self.anticipations[each].t.truth.f, ".3f")) + "," + str(
-                format(self.anticipations[each].t.truth.c, ".3f")) + " | " + self.anticipations[
-                     each].t.term.word + " | " + str(
-                format(self.anticipations[each].t.budget.priority, ".3f")) + "," + str(
-                format(self.anticipations[each].t.budget.durability, ".3f")) + "," + str(
-                format(self.anticipations[each].t.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+            A += "<font color='red'>" + str(
+                format(self.anticipations[each].t.truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                format(self.anticipations[each].t.truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                self.anticipations[each].t.term.word) + "</b> <br> <font color='green'>" + str(
+                format(self.anticipations[each].t.budget.priority, ".3f")) + " | " + str(
+                format(self.anticipations[each].t.budget.durability, ".3f")) + " | " + str(
+                format(self.anticipations[each].t.budget.quality, ".3f")) + "</font> <hr> </hr>"
         for each in self.events:
-            E += str(format(each[1].truth.f, ".3f")) + "," + str(format(each[1].truth.c, ".3f")) + " | " + each[
-                1].term.word + " | " + str(format(each[1].budget.priority, ".3f")) + "," + str(
-                format(each[1].budget.durability, ".3f")) + "," + str(
-                format(each[1].budget.quality, ".3f")) + "\n" + "-------" + "\n"
+            E += "<font color='red'>" + str(format(each[1].truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                format(each[1].truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                each[1].term.word) + "</b> <br> <font color='green'>" + str(
+                format(each[1].budget.priority, ".3f")) + " | " + str(
+                format(each[1].budget.durability, ".3f")) + " | " + str(
+                format(each[1].budget.quality, ".3f")) + "</font> <hr> </hr>"
         for each in self.operations:
-            O += str(format(each.truth.f, ".3f")) + "," + str(
-                format(each.truth.c, ".3f")) + " | " + each.term.word + " | " + str(
-                format(each.budget.priority, ".3f")) + "," + str(format(each.budget.durability, ".3f")) + "," + str(
-                format(each.budget.quality, ".3f")) + "\n" + "-------" + "\n"
+            O += "<font color='red'>" + str(format(each.truth.f, ".3f")) + "</font> | <font color='blue'>" + str(
+                format(each.truth.c, ".3f")) + "</font> <br> <b>" + escape(
+                each.term.word) + "</b> <br> <font color='green'>" + str(
+                format(each.budget.priority, ".3f")) + " | " + str(
+                format(each.budget.durability, ".3f")) + " | " + str(
+                format(each.budget.quality, ".3f")) + "</font> <hr> </hr>"
         return [A, E, O]

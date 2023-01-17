@@ -1,7 +1,7 @@
-import tkinter
 from abc import abstractmethod
-from pynars.Narsese import Term
+
 from pynars.NARS.DataStructures.MC.EventBufferMC import EventBufferMC
+from pynars.Narsese import Term
 
 
 class ChannelMC:

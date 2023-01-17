@@ -1,13 +1,15 @@
+import time
 from typing import List
 
 from pynars import Config, Global
 from pynars.GUI.Ui_Form import Ui_Form
+from pynars.GUI.Ui_Form import escape
+from pynars.SampleChannels.SampleChannel4 import SampleChannel4
 from ..DataStructures import Memory, Task, Concept
 from ..DataStructures.MC.ChannelMC import ChannelMC
 from ..DataStructures.MC.GlobalBufferMC import GlobalBufferMC
 from ..DataStructures.MC.InternalBufferMC import InternalBufferMC
 from ..DataStructures.MC.OutputBufferMC import OutputBufferMC
-from pynars.SampleChannels.SampleChannel4 import SampleChannel4
 from ..InferenceEngine import GeneralEngine
 from ...Narsese import parser
 
@@ -152,21 +154,39 @@ class ReasonerMC(Ui_Form):
     def click_button(self):
         text = self.input_textEdit.toPlainText()
         self.input_textEdit.clear()
-        text = text.split("\n")
-        self.input_lines(text)
+        additional_info = ""
+        if text != "":
+            additional_info += "<b> <font color='red'> User Input Succeed </font> </b> : <br> <br>"
+            additional_info += escape(text).replace("\n", "<br>") + "<hr> </hr>"
+            text = text.split("\n")
+            self.input_lines(text)
+        start_time = time.time()
         self.cycle()
-        self.show_content(self.content())
+        end_time = time.time()
+        additional_info += "<font color='green'> <b> Running Time </b>: " + str(
+            format(end_time - start_time, ".3f")) + " (s) <hr> </hr> </font>"
+        additional_info += "<b> (1) Cycle(s) Finished </b> <hr> </hr>"
+        self.show_content(self.content(additional_info))
 
     def click_buttons(self):
         text = self.input_textEdit.toPlainText()
         self.input_textEdit.clear()
-        text = text.split("\n")
-        self.input_lines(text)
+        additional_info = ""
+        if text != "":
+            additional_info += "<b> <font color='red'> User Input Succeed </font> </b> : <br> <br>"
+            additional_info += escape(text).replace("\n", "<br>") + "<hr> </hr>"
+            text = text.split("\n")
+            self.input_lines(text)
+        start_time = time.time()
         self.cycles(self.spinBox.value())
-        self.show_content(self.content())
+        end_time = time.time()
+        additional_info += "<font color='green'> <b> Running Time </b>: " + str(
+            format(end_time - start_time, ".3f")) + " (s) <hr> </hr> </font>"
+        additional_info += "<b> (" + str(self.spinBox.value()) + ") Cycle(s) Finished </b> <hr> </hr>"
+        self.show_content(self.content(additional_info))
 
-    def content(self):
-        ret = {"output_buffer": self.output_buffer.content(),
+    def content(self, additional_info):
+        ret = {"output_buffer": self.output_buffer.content(additional_info),
                "internal_buffer": self.internal_buffer.content(),
                "global_buffer": self.global_buffer.content()}
         for each in self.channels:
