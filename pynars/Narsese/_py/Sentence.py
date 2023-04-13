@@ -188,7 +188,6 @@ class Question(Sentence):
     answer_best: Sentence = None
 
     def __init__(self, term: Term, stamp: Stamp = None, curiosiry: Truth = None) -> None:
-        ''''''
         stamp = stamp if stamp is not None else Stamp(Global.time, None, None, None, None)
         # stamp.set_eternal()
         Sentence.__init__(self, term, Punctuation.Question, stamp)

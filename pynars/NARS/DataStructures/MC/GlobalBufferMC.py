@@ -11,25 +11,34 @@ class GlobalBufferMC(InputBufferMC):
     Currently, this is the only difference.
     """
 
-    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory):
+    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory,
+                 Mode304 = False):
         """
         Though the global buffer has an input variable "num_operation", but a global buffer will never process any
         operations, so this variable should always be 0.
         """
         super(GlobalBufferMC, self).__init__(num_slot, num_event, num_anticipation, num_operation, num_prediction,
                                              memory)
+        self.Mode304 = Mode304
+        # if this is True, the global buffer will work with no temporal reasoning capabilities
+        # and there are no selections of tasks, all input tasks will be forwarded to the memory
+        # and it will be like the classical 3.0.4 version of NARS
+        """
+        As the entrance of 
+        """
 
     def prediction_generation(self):
         """
         In the global buffer, not only =/> implications are generated. But also =|> implications are generated.
         """
-        # =/>
+        # subject =/> predicate
         if self.slots[self.present].candidate:
-            predicate = self.slots[self.present].candidate.term
+            predicate = self.slots[self.present].spatial_candidate.term
             for i in range(self.present):
                 if self.slots[i].candidate:
                     # e.g., (E, +1) as the subject
-                    subject = Compound.SequentialEvents(self.slots[i].candidate.term, Interval(abs(self.present - i)))
+                    subject = Compound.SequentialEvents(self.slots[i].spatial_candidate.term,
+                                                        Interval(abs(self.present - i)))
                     copula = Copula.PredictiveImplication  # =/>
                     term = Statement(subject, copula, predicate)
                     # truth, using truth-induction function (TODO, may subject to change)
@@ -46,7 +55,7 @@ class GlobalBufferMC(InputBufferMC):
                     # task generation
                     prediction = Task(sentence, budget)
                     self.update_prediction(prediction)
-        # =|>
+        # subject =|> predicate
         if self.slots[self.present].candidate:
             # from concurrent events
             predicate = self.slots[self.present].candidate.term
@@ -79,6 +88,10 @@ class GlobalBufferMC(InputBufferMC):
         historical compound generations successively. But the input of the historical compound generation will be the
         highest concurrent input.
         """
+
+        if self.Mode304:
+            return new_contents
+
         # remove the oldest slot and create a new one
         self.slots = self.slots[1:]
         self.slots.append(SlotMC(self.num_event, self.num_anticipation, self.num_operation))

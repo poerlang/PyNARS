@@ -1,15 +1,14 @@
 from pynars.Config import Enable
-from pynars.NAL.Inference.LocalRules import solve_query, solution_query, solution_question
-from pynars.NAL.MetaLevelInference.VariableSubstitution import unification__var_const
-
-from pynars.NARS.DataStructures._py.Link import TaskLink
-from pynars.Narsese._py.Sentence import Goal, Judgement, Question
-from pynars.Narsese import Statement, Term, Sentence, Budget, Task
-from pynars.Narsese._py.Task import Belief, Desire
-from .Concept import Concept
-from .Bag import Bag
 from pynars.NAL.Functions.Tools import revisible
 from pynars.NAL.Inference import local__revision
+from pynars.NAL.Inference.LocalRules import solution_query, solution_question
+from pynars.NAL.MetaLevelInference.VariableSubstitution import unification__var_const
+from pynars.NARS.DataStructures._py.Link import TaskLink
+from pynars.Narsese import Task
+from pynars.Narsese._py.Sentence import Goal
+from pynars.Narsese._py.Task import Belief, Desire
+from .Bag import Bag
+from .Concept import Concept
 
 
 # from pynars.NARS import Operation
@@ -20,12 +19,15 @@ class Memory:
         self.output_buffer = output_buffer
 
     def accept(self, task: Task):
-        '''
-        **Accept task**: Accept a task from the `Overall Experience`, and link it from all directly related concepts. Ref: *The Conceptual Design of OpenNARS 3.1.0*.
-        '''
+        """
+        **Accept task**: Accept a task from the `Overall Experience`, and link it from all directly related concepts.
+
+        Ref: *The Conceptual Design of OpenNARS 3.1.0*.
+        """
         # merging the new task as a concept into the memory
         concept: Concept = Concept._conceptualize(self, task.term, task.budget)
-        if concept is None: return None  # The memroy is full. The concept fails to get into the memory.
+        if concept is None:
+            return None  # The memroy is full. The concept fails to get into the memory.
 
         # then process each task according to its type
         task_revised, goal_derived, answers_question, answer_quest = None, None, None, None

@@ -27,7 +27,8 @@ class SlotMC:
         self.anticipations = {}  # anticipations need no priorities, so a dictionary is enough, compared with a 3-tuple
         self.operations = []
 
-        self.candidate = None
+        self.candidate = None  # a better name is "spatial-temporal candidate", but this name is too long
+        self.spatial_candidate = None
 
     def update_events(self, t: Task):
         """

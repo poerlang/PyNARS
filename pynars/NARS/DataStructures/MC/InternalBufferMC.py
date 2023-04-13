@@ -7,9 +7,11 @@ from pynars.NARS.DataStructures.MC.SlotMC import SlotMC
 
 class InternalBufferMC(InputBufferMC):
 
-    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory):
+    def __init__(self, num_slot, num_event, num_anticipation, num_operation, num_prediction, memory: Memory,
+                 Mode304 = False):
         super(InternalBufferMC, self).__init__(num_slot, num_event, num_anticipation, num_operation, num_prediction,
                                                memory)
+        self.Mode304 = Mode304
 
     def operation_processing_default(self):
         """
@@ -29,6 +31,9 @@ class InternalBufferMC(InputBufferMC):
         historical compound generations successively. But the input of the historical compound generation will be the
         highest concurrent input.
         """
+        if self.Mode304:
+            return new_contents
+
         # remove the oldest slot and create a new one
         self.slots = self.slots[1:]
         self.slots.append(SlotMC(self.num_event, self.num_anticipation, self.num_operation))

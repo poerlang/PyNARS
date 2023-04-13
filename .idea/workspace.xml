@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="911ba051-6b9b-452b-9974-bdcc93e36626" name="Changes" comment="MC 23/1/10 2nd revision">
+    <list default="true" id="911ba051-6b9b-452b-9974-bdcc93e36626" name="Changes" comment="Intermediate GUI updating.&#10;&#10;Currently, the name of these files are still ending with &quot;MC&quot;.&#10;&#10;A new GUI is introduced with better displaying. But it is still not finished. In the future, more debugging options will be added.">
+      <change afterPath="$PROJECT_DIR$/draft2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draft3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/Applications/ActiveVision.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/Applications/ObjectTracking.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/Applications/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/Applications/background_knowledge.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/Applications/stereo_labs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/UncannyTerms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/SampleChannels/EmptyChannel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/SampleChannels/SinglePendulum.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/draft.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/utils/GraphChallenge.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pynars/utils/MNIST_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pynars/ConsoleMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/ConsoleMC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pynars/GUI/Ui_Form.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/GUI/Ui_Form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/Config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NAL/Functions/BudgetFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NAL/Functions/BudgetFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NAL/Functions/TemporalFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NAL/Functions/TemporalFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NAL/Inference/LocalRules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NAL/Inference/LocalRules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NAL/Inference/SyllogisticRules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NAL/Inference/SyllogisticRules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NAL/Theorems/DecompositionalRules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NAL/Theorems/DecompositionalRules.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/Control/ReasonerMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/Control/ReasonerMC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/AnticipationMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/AnticipationMC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/ChannelMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/ChannelMC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/GlobalBufferMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/GlobalBufferMC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/InputBufferMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/InputBufferMC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/InternalBufferMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/InternalBufferMC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/OutputBufferMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/OutputBufferMC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/SlotMC.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/SlotMC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/_py/Concept.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/_py/Concept.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NARS/DataStructures/_py/Memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/DataStructures/_py/Memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/NARS/InferenceEngine/GeneralEngine/GeneralEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/NARS/InferenceEngine/GeneralEngine/GeneralEngine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/Narsese/_py/Budget.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/Narsese/_py/Budget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/Narsese/_py/Sentence.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/Narsese/_py/Sentence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/Narsese/_py/Task.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/Narsese/_py/Task.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pynars/SampleChannels/SampleChannel4.py" beforeDir="false" afterPath="$PROJECT_DIR$/pynars/SampleChannels/SampleChannel4.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,13 +76,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pynars/NARS/DataStructures/MC" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/pynars/utils" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\TORY\OneDrive - Temple University\AGI research\opennars_v3.1.2-main\archieve\PyNARS\PyNARS\pynars\utils" />
       <recent name="C:\Users\TORY\Downloads\PyNARS-0_0_2_pre_alpha (1)\PyNARS-0_0_2_pre_alpha\pynars\NARS\DataStructures\MC" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -65,21 +91,21 @@
       <recent name="C:\Users\TORY\OneDrive - Temple University\AGI research\opennars_v3.1.2-main\archieve\PyNARS\PyNARS\pynars\NARS\DataStructures\MC\SampleChannels" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ConsoleMC">
-    <configuration name="Console" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.ActiveVision">
+    <configuration name="ActiveVision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyNARS-0_0_2_pre_alpha" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\TORY\anaconda3\envs\python37\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pynars" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pynars/Applications" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pynars/Console.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pynars/Applications/ActiveVision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -132,7 +158,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="draft" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ObjectTracking" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyNARS-0_0_2_pre_alpha" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -140,12 +166,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pynars/Applications" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draft.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\TORY\OneDrive - Temple University\AGI research\opennars_v3.1.2-main\archieve\PyNARS\PyNARS\pynars\Applications\ObjectTracking.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -154,7 +180,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="draft5" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="draft2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyNARS-0_0_2_pre_alpha" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -167,7 +193,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draft5.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draft2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="draft3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PyNARS-0_0_2_pre_alpha" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draft3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -177,17 +225,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.draft" />
       <item itemvalue="Python.ConsoleMC" />
-      <item itemvalue="Python.Console" />
-      <item itemvalue="Python.draft5" />
+      <item itemvalue="Python.draft2" />
+      <item itemvalue="Python.draft3" />
+      <item itemvalue="Python.ObjectTracking" />
+      <item itemvalue="Python.ActiveVision" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ActiveVision" />
+        <item itemvalue="Python.ObjectTracking" />
+        <item itemvalue="Python.draft3" />
         <item itemvalue="Python.ConsoleMC" />
-        <item itemvalue="Python.draft" />
-        <item itemvalue="Python.draft5" />
-        <item itemvalue="Python.Console" />
+        <item itemvalue="Python.draft2" />
       </list>
     </recent_temporary>
   </component>
@@ -241,6 +291,40 @@
       <workItem from="1673490653006" duration="109000" />
       <workItem from="1673491859995" duration="6315000" />
       <workItem from="1673548303569" duration="29328000" />
+      <workItem from="1674053270403" duration="1108000" />
+      <workItem from="1674061524093" duration="10473000" />
+      <workItem from="1674074756699" duration="615000" />
+      <workItem from="1674155964721" duration="2140000" />
+      <workItem from="1674243297260" duration="1229000" />
+      <workItem from="1674684049405" duration="2233000" />
+      <workItem from="1674741946177" duration="4974000" />
+      <workItem from="1674828980479" duration="621000" />
+      <workItem from="1675347213851" duration="2294000" />
+      <workItem from="1675354603936" duration="3584000" />
+      <workItem from="1675446962695" duration="3719000" />
+      <workItem from="1675707339961" duration="47000" />
+      <workItem from="1676987659526" duration="16264000" />
+      <workItem from="1677078243075" duration="4145000" />
+      <workItem from="1677161493471" duration="19421000" />
+      <workItem from="1677768282502" duration="1237000" />
+      <workItem from="1677772402349" duration="1312000" />
+      <workItem from="1678807575690" duration="10543000" />
+      <workItem from="1678889040609" duration="12044000" />
+      <workItem from="1678908665870" duration="2985000" />
+      <workItem from="1679416092814" duration="629000" />
+      <workItem from="1680186791840" duration="786000" />
+      <workItem from="1680195097313" duration="627000" />
+      <workItem from="1680543396626" duration="11500000" />
+      <workItem from="1680644117070" duration="600000" />
+      <workItem from="1680661038274" duration="632000" />
+      <workItem from="1680731975808" duration="2714000" />
+      <workItem from="1680800220771" duration="1465000" />
+      <workItem from="1680803294527" duration="18742000" />
+      <workItem from="1680875951237" duration="1594000" />
+      <workItem from="1681305939336" duration="13153000" />
+      <workItem from="1681326021045" duration="6131000" />
+      <workItem from="1681335664272" duration="8400000" />
+      <workItem from="1681389357363" duration="19259000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit.">
       <created>1665253389457</created>
@@ -333,7 +417,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673397480602</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Intermediate GUI updating.&#10;&#10;Currently, the name of these files are still ending with &quot;MC&quot;.&#10;&#10;A new GUI is introduced with better displaying. But it is still not finished. In the future, more debugging options will be added.">
+      <created>1673998151209</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1673998151209</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -375,7 +466,8 @@
     <MESSAGE value="One more update on efficiency. Previously, updating events or checking anticipation is implemented in am ugly way. Now the algorithm is much better, but the running results is not as wished. I don't know why. I will deal with this efficiency problem later." />
     <MESSAGE value="MC 23/1/10 1st revision" />
     <MESSAGE value="MC 23/1/10 2nd revision" />
-    <option name="LAST_COMMIT_MESSAGE" value="MC 23/1/10 2nd revision" />
+    <MESSAGE value="Intermediate GUI updating.&#10;&#10;Currently, the name of these files are still ending with &quot;MC&quot;.&#10;&#10;A new GUI is introduced with better displaying. But it is still not finished. In the future, more debugging options will be added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Intermediate GUI updating.&#10;&#10;Currently, the name of these files are still ending with &quot;MC&quot;.&#10;&#10;A new GUI is introduced with better displaying. But it is still not finished. In the future, more debugging options will be added." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -396,14 +488,39 @@
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pynars/NARS/Control/ReasonerMC.py</url>
-          <line>128</line>
-          <option name="timeStamp" value="118" />
+          <url>file://$PROJECT_DIR$/pynars/NARS/DataStructures/MC/UncannyTerms.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="135" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pynars/NAL/Inference/SyllogisticRules.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="139" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pynars/NARS/Control/ReasonerMC.py</url>
-          <line>159</line>
-          <option name="timeStamp" value="121" />
+          <line>62</line>
+          <option name="timeStamp" value="153" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pynars/NARS/Control/ReasonerMC.py</url>
+          <line>169</line>
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/draft2.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="158" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pynars/Applications/ObjectTracking.py</url>
+          <line>228</line>
+          <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pynars/Applications/ActiveVision.py</url>
+          <line>417</line>
+          <option name="timeStamp" value="244" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -411,15 +528,21 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$code2.coverage" NAME="code2 Coverage Results" MODIFIED="1666204024787" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../../Fall 2022/CIS 5543" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$ChannelMC.coverage" NAME="ChannelMC Coverage Results" MODIFIED="1667260147598" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars/NARS/DataStructures/MC" />
-    <SUITE FILE_PATH="coverage/PyNARS$draft.coverage" NAME="draft Coverage Results" MODIFIED="1673591981748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$draft.coverage" NAME="draft Coverage Results" MODIFIED="1667326322834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$ConsoleMC.coverage" NAME="ConsoleMC Coverage Results" MODIFIED="1667336227503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$Console.coverage" NAME="Console Coverage Results" MODIFIED="1667324221816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
+    <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1667401482739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/PyNARS$draft.coverage" NAME="draft Coverage Results" MODIFIED="1673591981748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyNARS$draft3.coverage" NAME="draft3 Coverage Results" MODIFIED="1678913386065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyNARS$ActiveVision.coverage" NAME="ActiveVision Coverage Results" MODIFIED="1681410881794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars/Applications" />
+    <SUITE FILE_PATH="coverage/PyNARS$GraphChallenge.coverage" NAME="GraphChallenge Coverage Results" MODIFIED="1677176086035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars/utils" />
     <SUITE FILE_PATH="coverage/PyNARS$ConsoleMC2.coverage" NAME="ConsoleMC Coverage Results" MODIFIED="1673591908325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
+    <SUITE FILE_PATH="coverage/PyNARS$object_tracking.coverage" NAME="object_tracking Coverage Results" MODIFIED="1680876959004" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars/Applications" />
+    <SUITE FILE_PATH="coverage/PyNARS$draft__1_.coverage" NAME="draft (1) Coverage Results" MODIFIED="1677772410913" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
     <SUITE FILE_PATH="coverage/PyNARS$draft5.coverage" NAME="draft5 Coverage Results" MODIFIED="1673573997494" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$SampleEnvironment1.coverage" NAME="SampleEnvironment1 Coverage Results" MODIFIED="1665762478887" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars/NARS/DataStructures/MC/SampleChannels" />
-    <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1667401482739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/PyNARS_0_0_2_pre_alpha$assignment2.coverage" NAME="assignment2 Coverage Results" MODIFIED="1666203933989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyNARS$ConsoleMC.coverage" NAME="ConsoleMC Coverage Results" MODIFIED="1673993844119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
+    <SUITE FILE_PATH="coverage/PyNARS$draft2.coverage" NAME="draft2 Coverage Results" MODIFIED="1678823377451" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyNARS$ConsoleMC.coverage" NAME="ConsoleMC Coverage Results" MODIFIED="1678912909583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pynars" />
   </component>
 </project>

@@ -4,10 +4,11 @@ Configure some hyper-parameters and some other settings via the file `config.jso
 from pathlib import Path
 
 try:
-    import jstyleson as json # json with C/C++ style comments
+    import jstyleson as json  # json with C/C++ style comments
 except:
     # import json
     raise "please install the module by `pip install jstyleson`"
+
 
 class Enable:
     temporal_rasoning = False
@@ -16,50 +17,50 @@ class Enable:
     operation = False
     debug = True
 
+
 class Config:
-    priority: float=0.8
-    durability: float=0.8
-    quality: float=0.5
+    priority: float = 0.8
+    durability: float = 0.8
+    quality: float = 0.5
     num_buckets: int = 100
     max_duration: int = 10000
-    f: float=1.0
-    c: float=0.9
-    c_judgement: float=0.9
-    c_goal: float=0.9
-    k: int=1
-    p_judgement: float=0.8
-    d_judgement: float=0.5
-    p_question: float=0.9
-    d_question: float=0.9
-    p_quest: float=0.9
-    d_quest: float=0.9
-    p_goal: float=0.9
-    d_goal: float=0.9
-    
+    f: float = 1.0
+    c: float = 0.9
+    c_judgement: float = 0.9
+    c_goal: float = 0.9
+    k: int = 1
+    p_judgement: float = 0.8
+    d_judgement: float = 0.5
+    p_question: float = 0.9
+    d_question: float = 0.9
+    p_quest: float = 0.9
+    d_quest: float = 0.9
+    p_goal: float = 0.9
+    d_goal: float = 0.9
+
     p_feedback: float = 0.9
     d_feedback: float = 0.5
 
-    budget_thresh: float=0.01
+    budget_thresh: float = 0.01
 
-    nlevels_task_link: int=10
-    capacity_task_link: int=100
-    nlevels_term_link: int=10
-    capacity_term_link: int=100
-    capacity_table: int=100
+    nlevels_task_link: int = 10
+    capacity_task_link: int = 100
+    nlevels_term_link: int = 10
+    capacity_term_link: int = 100
+    capacity_table: int = 100
 
-    complexity_unit: float=1.0 # 1.0 - oo
+    complexity_unit: float = 1.0  # 1.0 - oo
 
-    quality_min: float=0.3
-    cycles_per_duration: int=5
-    n_forget_durations: int=2
-    cycles_forget = cycles_per_duration*n_forget_durations
+    quality_min: float = 0.3
+    cycles_per_duration: int = 5
+    n_forget_durations: int = 2
+    cycles_forget = cycles_per_duration * n_forget_durations
 
-    revision_max_occurence_distance: int=10
+    revision_max_occurence_distance: int = 10
 
     truth_epsilon = 0.01
     budget_epsilon = 0.0001
     complexity_unit = 1.0
-    
 
     variable_repr_normalized = False
 
@@ -71,8 +72,6 @@ class Config:
     temporal_duration = 5
     n_sequence_attempts = 10
     n_op_condition_attempts = 10
-
-    
 
     @classmethod
     def check(cls):
@@ -90,7 +89,6 @@ class Config:
 
 
 def load(file_path: str):
-
     file_path: Path = Path(file_path)
 
     valid = True
@@ -101,7 +99,7 @@ def load(file_path: str):
         print(f"The file `{file_path}` should be `*.json`.")
         valid = False
     if not valid:
-        file_path = Path(__file__).parent/'config.json'
+        file_path = Path(__file__).parent / 'config.json'
         print(f'Loaded config file: {file_path}')
     try:
         with open(file_path, 'r') as f:
@@ -110,10 +108,10 @@ def load(file_path: str):
         raise f"Error when openning the file `{file_path}`."
     # set driver mode (py/pyx/cypy/cpp)
     try:
-        pass # TODO
+        pass  # TODO
     except:
-        pass # TODO
-    
+        pass  # TODO
+
     # set hyper-parameters
     try:
         defaults: dict = content['HYPER-PARAMS']['DEFAULT']
@@ -142,11 +140,11 @@ def load(file_path: str):
             Config.c_judgement = truth['CONFIDENCE_JUDGEMENT']
             Config.c_goal = truth['CONFIDENCE_GOAL']
             Config.k = truth['K']
-        
+
         max_duration = defaults.get('MAX_DURATION', None)
         if max_duration is not None:
             Config.max_duration = max_duration
-        
+
         concept: dict = defaults.get('CONCEPT', None)
         if concept is not None:
             Config.nlevels_task_link = concept.get('NUM_LEVELS_TASKLINK_BAG', Config.nlevels_task_link)
@@ -159,13 +157,16 @@ def load(file_path: str):
         Config.cycles_per_duration = defaults.get('CYCLES_PER_DURATION', Config.cycles_per_duration)
         Config.n_forget_durations = defaults.get('NUM_FORGET_DURATIONS', Config.n_forget_durations)
         Config.cycles_forget = Config.cycles_per_duration * Config.n_forget_durations
-        Config.revision_max_occurence_distance = defaults.get('REVISION_MAX_OCCURRENCE_DISTANCE', Config.revision_max_occurence_distance)
+        Config.revision_max_occurence_distance = defaults.get('REVISION_MAX_OCCURRENCE_DISTANCE',
+                                                              Config.revision_max_occurence_distance)
 
         Config.rate_discount_c = defaults.get('RATE_DISCOUNT_CONFIDENCE', Config.rate_discount_c)
 
-        Config.rate_discount_p_internal_exp = defaults.get('RATE_DISCOUNT_PRIORITY_INTERNAL_EXPERIENCE', Config.rate_discount_p_internal_exp)
-        Config.rate_discount_d_internal_exp = defaults.get('RATE_DISCOUNT_DURABILITY_INTERNAL_EXPERIENCE', Config.rate_discount_d_internal_exp)
-        
+        Config.rate_discount_p_internal_exp = defaults.get('RATE_DISCOUNT_PRIORITY_INTERNAL_EXPERIENCE',
+                                                           Config.rate_discount_p_internal_exp)
+        Config.rate_discount_d_internal_exp = defaults.get('RATE_DISCOUNT_DURABILITY_INTERNAL_EXPERIENCE',
+                                                           Config.rate_discount_d_internal_exp)
+
         hyperparams: dict = content['HYPER-PARAMS']
         Config.truth_epsilon = hyperparams.get('TRUTH_EPSILON', Config.truth_epsilon)
         Config.budget_epsilon = hyperparams.get('BUDGET_EPSILON', Config.budget_epsilon)
@@ -174,9 +175,9 @@ def load(file_path: str):
         Config.n_sequence_attempts = hyperparams.get('TEMPORAL_DURATION', Config.n_sequence_attempts)
         Config.n_op_condition_attempts = hyperparams.get('NUM_OP_CONDITION_ATTEMPTS', Config.n_op_condition_attempts)
 
-        pass # TODO
+        pass  # TODO
     except:
-        pass # TODO
+        pass  # TODO
 
     Config.check()
     Config.apply()

@@ -22,5 +22,5 @@ class ChannelMC:
 
     def step(self):
         new_contents = self.information_gathering()
-        task_forward = self.event_buffer.step(new_contents, "SC2")
+        task_forward = self.event_buffer.step(new_contents)
         return task_forward

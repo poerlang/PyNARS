@@ -1,4 +1,4 @@
-'''
+"""
 First-order syllogism & higher-order syllogism
 
 @ Author:   Bowen XU
@@ -10,27 +10,28 @@ First-order syllogism & higher-order syllogism
     The param `inverse_premise` means whether to inverse the order of term in the task and term in the belief as the two premises, for example, if the terms in the task and the belief are {<S-->M>, <M-->P>}, and the `inverse_premise` equals `True`, then the premises are {<M-->P>, <S-->M>}.
     The param `inverse_copula` means whether to inverse the order of the subject and predicate in the task, for example, if the term in the task is <S-->M>, and the `inverse_copula` equals `True`, then the premise1 is <M-->S>.
     The param `inverse_copula` means whether to inverse the order of the subject and predicate in the task, for example, if the term in the task is <S-->M>, and the `inverse_copula` equals `True`, then the premise1 is <M-->S>.
-    
-'''
-import math
-from pynars.NAL.Functions.DesireValueFunctions import Desire_strong, Desire_weak, Desire_deduction, Desire_induction
+
+Modified by Tory Li (tuo90515@temple.edu).
+
+"""
+
+from pynars.NAL.Functions import truth_to_quality
+from pynars.NAL.Functions.BudgetFunctions import Budget_backward_weak, Budget_forward, Budget_backward
+from pynars.NAL.Functions.DesireValueFunctions import Desire_strong, Desire_weak
 from pynars.NAL.Functions.TruthValueFunctions import *
-from pynars.NAL.Functions.BudgetFunctions import Budget_backward_weak, Budget_forward, Budget_inference, Budget_backward
-from pynars.Narsese import Term, Copula, Statement, Truth, Task, Belief, Budget, Stamp
-from pynars.Narsese import Punctuation, Sentence, Judgement, Goal, Question, Quest
-from ..Functions import F_deduction, fc_to_w_minus, fc_to_w_plus
-from copy import deepcopy
+from pynars.Narsese import Budget, Truth
+from pynars.Narsese import Punctuation, Judgement, Goal, Question, Quest
+from pynars.Narsese import Statement, Task, Belief
 from ..Functions.StampFunctions import *
 
-
-
-
-'''
+"""
 strong syllogism
-'''
+"""
 
-def deduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+
+def deduction(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+              inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise1: <M --> P>
         premise2: <S --> M>
@@ -41,14 +42,14 @@ def deduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         premise2: <S ==> M>
         |-
         conclusion: <S ==> P>
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
@@ -56,28 +57,55 @@ def deduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
     statement = Statement(stat2.subject, stat1.copula, stat1.predicate)
 
     if punct_task.is_judgement:
+        """
+        A forward case.
+        
+        This has been touched, the new generated tasks are judgments, the priority (p) and durability (d) are 50% of
+        of the expectation (e) of the truth. This "50%" is a currently a hyperparameter.
+        """
         truth = Truth_deduction(premise1.truth, premise2.truth)
-        budget = Budget_forward(truth, budget_tasklink, budget_termlink)
+        # budget = Budget(0.5 * truth.e, 0.5 * truth.e, truth_to_quality(truth))  # the new one
+        budget = Budget_forward(truth, budget_tasklink, budget_termlink)  # the old one
         sentence_derived = Judgement(statement, stamp, truth)
     elif punct_task.is_goal:
+        """
+        A backward case, though currently its budget function is a forward case.
+        """
         truth = Desire_weak(premise1.truth, premise2.truth)
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
-        budget = Budget_backward_weak(truth_belief, budget_tasklink, budget_termlink)
+        """
+        A backward case, this seems to be completely wrong.
+        
+        This has been touched, the new generated tasks are questions, the priority of these new tasks are the same as
+        the priority of the processed task, but the durability is smaller, which is 50% of the previous one. This "50%"
+        is also a hyperparameter.
+        """
+        curiosity = None  # TODO
+        # budget = Budget(task.budget.priority, task.budget.durability * 0.5, task.budget.quality)  # the new one
+        budget = Budget_backward_weak(truth_belief, budget_tasklink, budget_termlink)  # the old one
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        """
+        A backward case, this seems to be completely wrong.
+        """
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
-    return Task(sentence_derived, budget)
+    generated_task = Task(sentence_derived, budget)
+    generated_task.parent_task = task
+    task.generated_tasks.append(generated_task)
+
+    return generated_task
 
 
-def analogy(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def analogy(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+            inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise1: <M --> P> (inverse: <P --> M>)
         premise2: <S <-> M> (inverse: <S <-> M>)
@@ -111,33 +139,39 @@ def analogy(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_ter
         premise2: <M <=> S> (inverse: <M <=> S>)
         |-
         conclusion: <S ==> P> (inverse: <P ==> S>)
-    '''
-    # premise1, premise2 = (task.sentence, belief.sentence) if belief.term.is_commutative else (belief.sentence, task.sentence)
-    premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence) # to ensure that the copula of premise1 is inheritence, and that the copula of premise2 is similarity.
+    """
+    # premise1, premise2 = (task.sentence, belief.sentence) \
+    # if belief.term.is_commutative \
+    # else (belief.sentence, task.sentence)
+    premise1, premise2 = (task.sentence, belief.sentence) \
+        if not inverse_premise \
+        else (belief.sentence, task.sentence)
+    # to ensure that the copula of premise1 is inheritance, and that the copula of premise2 is similarity.
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
-    
+
     # TODO
     if not inverse_copula:
         if stat2.predicate == stat1.subject:
             statement = Statement(stat2.subject, stat1.copula, stat1.predicate)
         elif stat2.subject == stat1.subject:
             statement = Statement(stat2.predicate, stat1.copula, stat1.predicate)
-        else: raise "Invalid case."
+        else:
+            raise "Invalid case."
     else:
         if stat2.predicate == stat1.predicate:
             statement = Statement(stat1.subject, stat1.copula, stat2.subject)
         elif stat2.subject == stat1.predicate:
             statement = Statement(stat1.subject, stat1.copula, stat2.predicate)
-        else: raise "Invalid case."
-            
+        else:
+            raise "Invalid case."
 
     if punct_task.is_judgement:
         truth = Truth_analogy(premise1.truth, premise2.truth)
@@ -149,20 +183,22 @@ def analogy(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_ter
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward_weak(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def resemblance(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def resemblance(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise1: <M <-> P> (inverse: <P <-> M>)
         premise2: <S <-> M> (inverse: <S <-> M>)
@@ -208,15 +244,16 @@ def resemblance(task: Task, belief: Belief, budget_tasklink: Budget=None, budget
         premise2: <M <=> S> (inverse: <M <=> S>)
         |-
         conclusion: <S <=> P> (inverse: <P <=> S>)
-    '''
+    """
 
-    premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence) # to ensure that the premise2 is a higher-order statement.
+    premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (
+    belief.sentence, task.sentence)  # to ensure that the premise2 is a higher-order statement.
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
@@ -226,13 +263,15 @@ def resemblance(task: Task, belief: Belief, budget_tasklink: Budget=None, budget
             statement = Statement(stat2.subject, stat2.copula, stat1.predicate)
         elif stat2.subject == stat1.subject:
             statement = Statement(stat2.predicate, stat2.copula, stat1.predicate)
-        else: raise "Invalid case."
+        else:
+            raise "Invalid case."
     else:
         if stat2.predicate == stat1.predicate:
             statement = Statement(stat1.subject, stat2.copula, stat2.subject)
         elif stat2.subject == stat1.predicate:
             statement = Statement(stat1.subject, stat2.copula, stat2.predicate)
-        else: raise "Invalid case."
+        else:
+            raise "Invalid case."
 
     if punct_task.is_judgement:
         truth = Truth_resemblance(premise1.truth, premise2.truth)
@@ -243,24 +282,27 @@ def resemblance(task: Task, belief: Belief, budget_tasklink: Budget=None, budget
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-'''
+"""
 weak syllogism
-'''
+"""
 
-def abduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+
+def abduction(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+              inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise1: <P --> M>
         premise2: <S --> M>
@@ -281,14 +323,14 @@ def abduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         premise2: <S =/> M>
         |-
         conclusion: <S =\> P>
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
@@ -305,22 +347,24 @@ def abduction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         Budget_function = Budget_backward if not inverse_premise else Budget_backward_weak
         budget = Budget_function(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         Budget_function = Budget_backward_weak if not inverse_premise else Budget_backward
         budget = Budget_function(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def induction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def induction(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+              inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise1: <M --> P>
         premise2: <M --> S>
@@ -341,14 +385,14 @@ def induction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         premise2: <M =/> S>
         |-
         conclusion: <S =/> P>
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
@@ -365,22 +409,24 @@ def induction(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         Budget_function = Budget_backward if not inverse_premise else Budget_backward_weak
         budget = Budget_function(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         Budget_function = Budget_backward_weak if not inverse_premise else Budget_backward
         budget = Budget_function(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def exemplification(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def exemplification(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                    inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     First-order:
         premise2: <P --> M>
         premise1: <M --> S>
@@ -396,20 +442,20 @@ def exemplification(task: Task, belief: Belief, budget_tasklink: Budget=None, bu
         premise2: <M =\> S>
         |-
         conclusion: <S =/> P>
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
 
     statement = Statement(stat2.predicate, stat1.copula.reverse, stat1.subject)
-    
+
     if punct_task.is_judgement:
         truth = Truth_exemplification(premise1.truth, premise2.truth)
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
@@ -419,21 +465,23 @@ def exemplification(task: Task, belief: Belief, budget_tasklink: Budget=None, bu
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward_weak(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def comparison(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    ''''''
-    '''
+def comparison(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+               inverse_premise: bool = False, inverse_copula: bool = False):
+    """"""
+    """
     First-order:
         premise1: <M --> P> (inverse_copula: <P --> M>)
         premise2: <M --> S> (inverse_copula: <S --> M>)
@@ -449,20 +497,23 @@ def comparison(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_
         premise2: <M =\> S>  (inverse_copula: <S =/> M>)
         |-
         conclusion: <S </> P>
-    '''
-    premise1, premise2 = (task.sentence, belief.sentence) if not (inverse_copula ^ inverse_premise) else (belief.sentence, task.sentence)
+    """
+    premise1, premise2 = (task.sentence, belief.sentence) if not (inverse_copula ^ inverse_premise) else (
+    belief.sentence, task.sentence)
 
     punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
 
     copula = stat1.copula.symmetrize() if not inverse_copula else stat2.copula.symmetrize()
-    statement = Statement(stat2.predicate, copula, stat1.predicate) if not inverse_copula else Statement(stat2.subject, copula, stat1.subject)
+    statement = Statement(stat2.predicate, copula, stat1.predicate) if not inverse_copula else Statement(stat2.subject,
+                                                                                                         copula,
+                                                                                                         stat1.subject)
 
     if punct_task.is_judgement:
         truth = Truth_comparison(premise1.truth, premise2.truth)
@@ -473,24 +524,27 @@ def comparison(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Goal(statement, stamp, truth)
     elif punct_task.is_question:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Question(statement, stamp, curiosity)
     elif punct_task.is_quest:
-        curiosity = None # TODO
+        curiosity = None  # TODO
         budget = Budget_backward_weak(truth_belief, budget_tasklink, budget_termlink)
         sentence_derived = Quest(statement, stamp, curiosity)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-'''Other rules out of the book'''
+"""Other rules out of the book"""
+
 
 # This is a special rule, which is different from those of the syllogystic rules above. The form of the derived task differs between those derived from different types of sentence.
-def reversion(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    ''''''
-    '''
+def reversion(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+              inverse_premise: bool = False, inverse_copula: bool = False):
+    """"""
+    """
     First-order:
         For Judgement:
         premise1: <S --> P>. 
@@ -526,14 +580,14 @@ def reversion(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         This is essentially a 2-step inference.
 
         For other cases, the rule is obviously right.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     # punct_task: Punctuation = task.sentence.punct
     stamp_task: Stamp = task.stamp
     stamp_belief: Stamp = belief.stamp
     truth_belief: Truth = belief.truth
-    
+
     stat1: Statement = premise1.term
     stat2: Statement = premise2.term
     stamp = Stamp_merge(stamp_task, stamp_belief)
@@ -543,13 +597,12 @@ def reversion(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_t
         truth = Truth_intersection(premise1.truth, premise2.truth)
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    elif task.is_goal or task.is_question or task.is_quest: 
+    elif task.is_goal or task.is_question or task.is_quest:
         statement = task.term
         truth = Truth_conversion(belief.truth)
         budget = Budget_forward(truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
-
-

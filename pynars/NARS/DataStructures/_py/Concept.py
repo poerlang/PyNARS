@@ -141,7 +141,9 @@ class Concept(Item):
         task_link = TaskLink(self, task, budget, True, index=[])
         self._insert_task_link(task_link)
         if self.term.is_atom: return
-        sub_budget = budget.distribute(self.term.count()-1) # TODO: It seems that the budget is not the same with that in OpenNARS 3.0.4/3.1.0. Check here.
+        sub_budget = budget.distribute(self.term.count()-1)
+        # TODO: It seems that the budget is not the same with that in OpenNARS 3.0.4/3.1.0.
+
         for term in self.term.components:
             if term == place_holder: continue # should it skip the `place_holder?`
             concept = Concept._conceptualize(concepts, term, sub_budget)
