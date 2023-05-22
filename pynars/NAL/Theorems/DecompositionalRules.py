@@ -1,11 +1,9 @@
-
-from pynars.Narsese import Copula, Statement, Compound, Connector, Term, Truth, Task, Belief, Budget
-from pynars.Narsese import Judgement, Goal, Quest, Question
-from pynars.Narsese import truth_analytic
+from pynars.Narsese import Judgement
+from pynars.Narsese import Statement, Compound, Task, Belief
 from ..Functions import *
 
-'''
-Decompositional rules
+"""
+Decomposition rules
 
 Including,
         S1                          S2                      S
@@ -18,7 +16,6 @@ Including,
 6       <(&, T1, T2) --> M>.        (--, <T1 --> M>).   |-  (--, <T2 --> M>).
 7       (--, <(~, T1, T2) --> M>).  <T1 --> M>.         |-  <T2 --> M>.
 8       (--, <(~, T2, T1) --> M>).  (--, <T1 --> M>).   |-  (--, <T2 --> M>).
-
 9       (--, (&&, T1, T2)).         T1.                 |-  (--, T2).
 10      (||, T1, T2).               (--, T1).           |-  T2.
 
@@ -32,13 +29,15 @@ Then, which rule should be took?
 TODO:
     Make a general check function to get the valid knowledge according to the two premises.
     And in each rule function, do no checking and get the derived knowedge directly.
-'''
+"""
 
-def decomposition_theorem1(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+
+def decomposition_theorem1(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:   (--, <M --> (&, T1, T2)>).  <M --> T1>. |-  (--, <M --> T2>).
     Practical:  <M --> (&, T1, T2)>.        <M --> T1>. |-  <M --> T2>.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -53,16 +52,19 @@ def decomposition_theorem1(task: Task, belief: Belief, budget_tasklink: Budget=N
     statement = Statement(stat2.subject, Copula.Inheritance, compound - stat2.predicate)
 
     if task.is_judgement:
-        truth = Truth_negation(Truth_deduction(Truth_intersection(Truth_negation(premise1.truth), premise2.truth), truth_analytic))
+        truth = Truth_negation(
+            Truth_deduction(Truth_intersection(Truth_negation(premise1.truth), premise2.truth), truth_analytic))
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem2(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def decomposition_theorem2(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:   <M --> (|, T1, T2)>.        (--, <M --> T1>).   |-  <M --> T2>.
     Practical:  <M --> (|, T1, T2)>.        <M --> T1>.         |-  <M --> T2>.
 
@@ -74,7 +76,7 @@ def decomposition_theorem2(task: Task, belief: Belief, budget_tasklink: Budget=N
     ((M → (T1∩T2))∧¬(M → (T1∩T2∩T3∩T4)) =⇒ ¬(M → (T3∩T4))
 
 
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -89,21 +91,25 @@ def decomposition_theorem2(task: Task, belief: Belief, budget_tasklink: Budget=N
     statement = Statement(stat2.subject, stat1.copula, compound - stat2.predicate)
 
     if task.is_judgement:
-        # # As a theorem to apply, the truth should be calculated with the analytic truth using the deduction rule, isn't it?
+        # As a theorem to apply, the truth should be calculated with the analytic truth using the deduction rule,
+        # isn't it?
+
         # truth = Truth_deduction(Truth_intersection(premise1.truth, Truth_negation(premise2.truth)), truth_analytic)
         truth = Truth_intersection(premise1.truth, Truth_negation(premise2.truth))
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem3(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def decomposition_theorem3(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:   (--, <M --> (-, T1, T2)>).  <M --> T1>. |-  <M --> T2>.
     Practical:  <M --> (-, T1, T2)>).  <M --> T1>.      |-  <M --> T2>.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -121,16 +127,18 @@ def decomposition_theorem3(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_intersection(Truth_negation(premise1.truth), premise2.truth)
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem4(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def decomposition_theorem4(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:   (--, <M --> (-, T2, T1)>).  (--, <M --> T1>).   |-  (--, <M --> T2>).
     Practical:  <M --> (-, T1, T2)>).  <M --> T1>.              |-  <M --> T2>.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -148,12 +156,15 @@ def decomposition_theorem4(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_negation(Truth_intersection(Truth_negation(premise1.truth), Truth_negation(premise2.truth)))
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
-def decomposition_theorem5(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''(--, <(|, T1, T2) --> M>).  <T1 --> M>.         |-  (--, <T2 --> M>).'''
+
+def decomposition_theorem5(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """(--, <(|, T1, T2) --> M>).  <T1 --> M>.         |-  (--, <T2 --> M>)."""
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -171,13 +182,15 @@ def decomposition_theorem5(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_deduction(Truth_intersection(premise1.truth, premise2.truth), truth_analytic)
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem6(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''<(&, T1, T2) --> M>.        (--, <T1 --> M>)   |-  (--, <T2 --> M>).'''
+def decomposition_theorem6(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """<(&, T1, T2) --> M>.        (--, <T1 --> M>)   |-  (--, <T2 --> M>)."""
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -195,13 +208,15 @@ def decomposition_theorem6(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_deduction(Truth_intersection(premise1.truth, premise2.truth), truth_analytic)
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem7(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''(--, <(~, T1, T2) --> M>).  <T1 --> M>.         |-  <T2 --> M>.'''
+def decomposition_theorem7(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """(--, <(~, T1, T2) --> M>).  <T1 --> M>.         |-  <T2 --> M>."""
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -219,13 +234,15 @@ def decomposition_theorem7(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_deduction(Truth_intersection(premise1.truth, premise2.truth), truth_analytic)
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem8(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''(--, <(~, T2, T1) --> M>).  (--, <T1 --> M>).   |-  (--, <T2 --> M>).'''
+def decomposition_theorem8(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """(--, <(~, T2, T1) --> M>).  (--, <T1 --> M>).   |-  (--, <T2 --> M>)."""
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -243,16 +260,18 @@ def decomposition_theorem8(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_deduction(Truth_intersection(premise1.truth, premise2.truth), truth_analytic)
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem9(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def decomposition_theorem9(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                           inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:  (--, (&&, T2, T1)).  T1. |- (--, T2).
     Practical: (&&, T2, T1).        T1. |- T2.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -270,16 +289,18 @@ def decomposition_theorem9(task: Task, belief: Belief, budget_tasklink: Budget=N
         truth = Truth_negation(Truth_intersection(Truth_negation(premise1.truth), premise2.truth))
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)
 
 
-def decomposition_theorem10(task: Task, belief: Belief, budget_tasklink: Budget=None, budget_termlink: Budget=None, inverse_premise: bool=False, inverse_copula: bool=False):
-    '''
+def decomposition_theorem10(task: Task, belief: Belief, budget_tasklink: Budget = None, budget_termlink: Budget = None,
+                            inverse_premise: bool = False, inverse_copula: bool = False):
+    """
     Original:  (||, T1, T2).    (--, T1).   |-  T2.
     Practical: (||, T1, T2).    T1.         |-  T2.
-    '''
+    """
     premise1, premise2 = (task.sentence, belief.sentence) if not inverse_premise else (belief.sentence, task.sentence)
 
     stamp_task: Stamp = task.stamp
@@ -297,6 +318,7 @@ def decomposition_theorem10(task: Task, belief: Belief, budget_tasklink: Budget=
         truth = Truth_intersection(premise1.truth, Truth_negation(premise2.truth))
         budget = Budget_forward_compound(statement, truth, budget_tasklink, budget_termlink)
         sentence_derived = Judgement(statement, stamp, truth)
-    else: raise "Invalid case."
+    else:
+        raise "Invalid case."
 
     return Task(sentence_derived, budget)

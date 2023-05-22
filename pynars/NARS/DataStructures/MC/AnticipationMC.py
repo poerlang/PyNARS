@@ -1,6 +1,6 @@
-from pynars.Narsese import Task, parser
 from pynars.NAL.Inference.LocalRules import revision
 from pynars.NARS.DataStructures.MC import InputBufferMC
+from pynars.Narsese import Task, parser
 
 
 class AnticipationMC:
@@ -18,6 +18,8 @@ class AnticipationMC:
         self.solved = False
 
     def satisfied(self, buffer: InputBufferMC, event: Task):
+        self.solved = True
+
         revised_t = revision(self.t, event)  # revision if satisfied
 
         tmp_prediction = parser.parse(self.parent_prediction.sentence.word + "%1.0; 0.5%")  # one positive case
